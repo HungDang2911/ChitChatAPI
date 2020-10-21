@@ -1,17 +1,30 @@
 const usersService = require('./usersService');
 
-module.exports.register = (req, res) => {
+module.exports.register = async (req, res) => {
   const user = req.body;
-  usersService.createUser(user);
-  // usersService.login(user);
+  try {
+    await usersService.createUser(user);
+    res.status(200);
+  } catch (error) {
+    console.log(error)
+    res.status(422).send(error);
+  }
 };
 
-module.exports.login = (req, res) => {
+module.exports.login = async (req, res) => {
   const user = req.body;
-  const accessToken = usersService.generateAccessToken(user);
-  const refreshToken = usersService.generateRefreshToken(user);
-  usersService.saveRefreshToken(user.username, refreshToken);
-  res.json({ accessToken, refreshToken });
+  try {
+    const { validationError } = await usersService.checkUsernameAndPassword(user);
+
+    if (validationError) res.status(422).send(validationError);
+
+    const accessToken = usersService.generateAccessToken(user);
+    const refreshToken = usersService.generateRefreshToken(user);
+    usersService.saveRefreshToken(user.username, refreshToken);
+    res.json({ accessToken, refreshToken });
+  } catch(error) {
+    console.log(error);
+  }
 };
 
 module.exports.token = (req, res) => {

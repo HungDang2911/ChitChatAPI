@@ -3,12 +3,12 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 
 module.exports.createUser = async (user) => {
-  const { username, password } = user;
+  const { username, password, email } = user;
   const saltRounds = 10;
 
   try {
     const encryptedPassword = await bcrypt.hash(password, saltRounds);
-    const user = new User({ username, password: encryptedPassword });
+    const user = new User({ username, password: encryptedPassword, email });
     user.save();
   } catch (err) {
     console.log(err);
@@ -34,4 +34,20 @@ module.exports.checkRefreshToken = (username, refreshToken) => {
 
 }
 
-module.exports.login = (user) => {};
+module.exports.checkUsernameAndPassword = async (user) => {
+  const { username, password } = user;
+  let validationError;
+
+  try {
+    const user = await User.findOne({ username });
+    if (!user) validationError = "No users match that username.";
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) validationError = "Wrong password";
+
+    return { validationError };
+  } catch (err) {
+    console.log(err);
+  }
+};
+
