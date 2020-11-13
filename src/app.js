@@ -13,6 +13,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.json());
 app.use("/users", usersAPI);
-app.use("/messages", messagesAPI);
+// app.use("/messages", messagesAPI);
 
 module.exports = app;

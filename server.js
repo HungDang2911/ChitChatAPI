@@ -27,13 +27,13 @@ const rateLimiter = new RateLimiterRedis({
 })
 
 const port = process.env.PORT || 3000;
-
 const server = http.createServer(app);
-
-const io = require('socket.io')(server);
+const options = {};
+const io = require('socket.io')(server, options);
+const handleMessageAndCall = require('./src/io');
 
 io.on('connection', (socket) => {
-  console.log('a user connected');
+  handleMessageAndCall(socket);
 })
 
 server.listen(port);
