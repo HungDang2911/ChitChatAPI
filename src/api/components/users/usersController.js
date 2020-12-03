@@ -18,7 +18,7 @@ module.exports.login = async (req, res) => {
       user
     );
 
-    if (validationError) res.status(422).send(validationError);
+    if (validationError) return res.status(422).send(validationError);
 
     const userId = (await usersService.getUser(user.username))._id;
 
