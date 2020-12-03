@@ -2,13 +2,15 @@ require('dotenv').config();
 const http = require('http');
 const app = require('./src/app');
 const redis = require('redis');
-const { RateLimiterRedis } = require('rate-limiter-flexible');
+// const { RateLimiterRedis } = require('rate-limiter-flexible');
 const mongoose = require('mongoose');
 const db = mongoose.connection;
 
 mongoose.connect(process.env.MONGODB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: false
 });
 
 db.once('open', () => {

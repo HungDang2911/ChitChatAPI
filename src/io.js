@@ -1,4 +1,4 @@
-const mediasoup = require('mediasoup');
+// const mediasoup = require("mediasoup");
 
 module.exports = (socket) => {
   socket.on('disconnect', () => console.log(`Disconnected: ${socket.id}`));

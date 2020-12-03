@@ -2,8 +2,12 @@ const mongoose = require('mongoose');
 
 const { ObjectId } = mongoose.Schema.Types;
 
+const ObjectId = mongoose.Schema.Types.ObjectId;
+
 const userSchema = mongoose.Schema({
-  username: { type: String, required: true },
+  fullName: { type: String, required: true },
+  sex: { type: Boolean, required: true },
+  username: { type: String, unique: true, required: true },
   password: { type: String, required: true },
   email: { type: String, required: true },
   conversations: [ObjectId],
@@ -16,6 +20,7 @@ const userSchema = mongoose.Schema({
       },
     },
   ],
+  friends: [ObjectId],
 });
 
 module.exports = mongoose.model('User', userSchema);
