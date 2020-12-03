@@ -1,9 +1,12 @@
 const Conversation = require('./conversationsDAL');
+const User = require('../users/usersDAL');
 
-module.exports.getConversationById = async (conversationId) => {
+module.exports.getAllConversations = async (userId) => {
   try {
-    const conversation = Conversation.findById(conversationId);
-    return conversation;
+    const conversations = await User.findById(userId)
+      .populate('conversations')
+      .exec();
+    return conversations;
   } catch (err) {
     console.log(err);
   }
@@ -11,7 +14,9 @@ module.exports.getConversationById = async (conversationId) => {
 
 module.exports.addMessageToConversation = async (conversationId, message) => {
   try {
-    Conversation.findOneAndUpdate(conversationId, {
+    
+
+    await Conversation.findOneAndUpdate(conversationId, {
       $push: { messages: message },
     });
   } catch (err) {
