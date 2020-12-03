@@ -15,16 +15,16 @@ db.once('open', () => {
   console.log('connected database');
 });
 
-const redisClient = redis.createClient({
-  enable_offline_queue: false
-})
+// const redisClient = redis.createClient({
+//   enable_offline_queue: false
+// })
 
-const rateLimiter = new RateLimiterRedis({
-  storeClient: redisClient,
-  points: 20,
-  duration: 1,
-  blockDuration: 2,  
-})
+// const rateLimiter = new RateLimiterRedis({
+//   storeClient: redisClient,
+//   points: 20,
+//   duration: 1,
+//   blockDuration: 2,  
+// })
 
 const port = process.env.PORT || 3000;
 const server = http.createServer(app);

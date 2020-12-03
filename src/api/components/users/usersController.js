@@ -4,7 +4,7 @@ module.exports.register = async (req, res) => {
   const user = req.body;
   try {
     await usersService.createUser(user);
-    res.status(200);
+    res.status(200).send();
   } catch (error) {
     console.log(error)
     res.status(422).send(error);
@@ -21,7 +21,7 @@ module.exports.login = async (req, res) => {
     const accessToken = usersService.generateAccessToken(user);
     const refreshToken = usersService.generateRefreshToken(user);
     usersService.saveRefreshToken(user.username, refreshToken);
-    res.json({ accessToken, refreshToken });
+    res.status(200).json({ accessToken, refreshToken });
   } catch(error) {
     console.log(error);
   }

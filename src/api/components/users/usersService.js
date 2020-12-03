@@ -41,7 +41,6 @@ module.exports.checkUsernameAndPassword = async (user) => {
   try {
     const user = await User.findOne({ username });
     if (!user) validationError = "No users match that username.";
-
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) validationError = "Wrong password";
 
@@ -51,3 +50,7 @@ module.exports.checkUsernameAndPassword = async (user) => {
   }
 };
 
+
+module.exports.getAllConversations = async (userId) => {
+  User.findById
+}
