@@ -33,6 +33,13 @@ module.exports.login = async (req, res) => {
   }
 };
 
+module.exports.searchUser = async (req, res) => {
+  console.log(req.headers.Authorization)
+  const username = req.query.username;
+  const records = await usersService.getUsersByName(username);
+  res.send(records);
+};
+
 module.exports.getAccessToken = (req, res) => {
   const { username, refreshToken } = req.body;
   if (usersService.checkRefreshToken(username, refreshToken)) {

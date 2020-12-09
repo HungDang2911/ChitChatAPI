@@ -14,11 +14,13 @@ module.exports.getAllConversations = async (userId) => {
 
 module.exports.addMessageToConversation = async (conversationId, message) => {
   try {
-    
-
-    await Conversation.findOneAndUpdate(conversationId, {
-      $push: { messages: message },
-    });
+    await Conversation.findOneAndUpdate(
+      conversationId,
+      {
+        $push: { messages: message },
+      },
+      { upsert: true }
+    );
   } catch (err) {
     console.log(err);
   }

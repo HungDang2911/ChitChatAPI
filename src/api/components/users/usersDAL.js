@@ -23,6 +23,7 @@ const userSchema = mongoose.Schema({
     },
   ],
   friends: [ObjectId],
+  friendRequest: [ObjectId],
 });
 
 module.exports = mongoose.model('User', userSchema);

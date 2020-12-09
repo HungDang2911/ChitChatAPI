@@ -1,6 +1,6 @@
-const User = require("./usersDAL");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const User = require('./usersDAL');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 module.exports.createUser = async (user) => {
   const { password } = user;
@@ -15,17 +15,17 @@ module.exports.createUser = async (user) => {
   }
 };
 
-module.exports.getUser = async (username) => {
+module.exports.getUsersByName = async (username) => {
   try {
-    const user = await User.findOne({ username });
-    return user;
+    const records = await User.find({ username: new RegExp(username, 'i') });
+    return records;
   } catch (err) {
     console.log(err);
   }
 };
 
 module.exports.generateAccessToken = (user) => {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1h" });
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
 };
 
 module.exports.generateRefreshToken = (user) => {
@@ -78,9 +78,9 @@ module.exports.checkUsernameAndPassword = async (user) => {
 
   try {
     const user = await User.findOne({ username });
-    if (!user) validationError = "No users match that username.";
+    if (!user) validationError = 'No users match that username.';
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) validationError = "Wrong password";
+    if (!isPasswordValid) validationError = 'Wrong password';
 
     return { validationError };
   } catch (err) {
@@ -88,7 +88,6 @@ module.exports.checkUsernameAndPassword = async (user) => {
   }
 };
 
-
 module.exports.getAllConversations = async (userId) => {
-  User.findById
-}
+  User.findById;
+};

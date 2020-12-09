@@ -11,6 +11,6 @@ module.exports = (socket) => {
   socket.on('chat', (data) => {
     const { message, room } = data;
     console.log(`msg: ${message}, room: ${room}`);
-    io.to(room).emit('chat', message);
+    socket.broadcast.to(room).emit('chat', message);
   });
 };

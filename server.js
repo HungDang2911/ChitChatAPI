@@ -10,7 +10,7 @@ mongoose.connect(process.env.MONGODB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
-  useFindAndModify: false
+  useFindAndModify: false,
 });
 
 db.once('open', () => {
@@ -25,17 +25,53 @@ db.once('open', () => {
 //   storeClient: redisClient,
 //   points: 20,
 //   duration: 1,
-//   blockDuration: 2,  
+//   blockDuration: 2,
 // })
 
 const port = process.env.PORT || 3000;
 const server = http.createServer(app);
 const options = {};
 const io = require('socket.io')(server, options);
-const handleMessageAndCall = require('./src/io');
+
+const users = {};
+
+var admin = require('firebase-admin');
+
+var serviceAccount = require("path/to/serviceAccountKey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
 
 io.on('connection', (socket) => {
-  handleMessageAndCall(socket);
-})
+  socket.on('saveUserInfo', (data) => {
+    users[socket.id] = data;
+  });
+
+  socket.on('disconnect', () => {
+    console.log(`Disconnected: ${socket.id}`);
+    delete users[socket.id];
+  });
+
+  socket.on('join', (room) => {
+    console.log(`Socket ${socket.id} joining ${room}`);
+    socket.join(room);
+  });
+
+  socket.on('chat', (data) => {
+    const { message, room } = data;
+    console.log(`msg: ${message}, room: ${room}`);
+    socket.broadcast.to(room).emit('chat', message);
+    socket.emit('chat', )
+  });
+
+  socket.on('sendFriendRequest', function (data) {
+    users[data.friendId].socket.emit("receiveFriendRequest")
+  });
+
+  socket.on('acceptFriendRequest', function(data) {
+    
+  })
+});
 
 server.listen(port);
