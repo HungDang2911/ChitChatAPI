@@ -20,7 +20,7 @@ module.exports.login = async (req, res) => {
 
     if (validationError) return res.status(422).send(validationError);
 
-    const userId = (await usersService.getUser(user.username))._id;
+    const userId = (await usersService.getOneUserByUsername(user.username))._id;
 
     user._id = userId;
 
@@ -34,7 +34,6 @@ module.exports.login = async (req, res) => {
 };
 
 module.exports.searchUser = async (req, res) => {
-  console.log(req.headers.Authorization)
   const username = req.query.username;
   const records = await usersService.getUsersByName(username);
   res.send(records);

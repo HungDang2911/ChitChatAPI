@@ -15,9 +15,18 @@ module.exports.createUser = async (user) => {
   }
 };
 
-module.exports.getUsersByName = async (username) => {
+module.exports.getOneUserByUsername = async (username) => {
   try {
-    const records = await User.find({ username: new RegExp(username, 'i') });
+    const user = await User.findOne({ username });
+    return user;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+module.exports.getUsersByUsername = async (username) => {
+  try {
+    const records = await User.find({ username: new RegExp(username, 'i') }, '-password');
     return records;
   } catch (err) {
     console.log(err);
@@ -65,7 +74,11 @@ module.exports.acceptFriendRequest = async (userId, friendId) => {
 
 module.exports.getFriends = async (userId) => {
   try {
-    const user = await User.findById(userId);
+    const user = await User.findById(userId, 'friends').populate({
+      path: 'friends',
+      select: '_id fullName email username'
+    });
+
     return user.friends;
   } catch (err) {
     console.log(err);

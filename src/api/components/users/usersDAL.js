@@ -13,7 +13,7 @@ const userSchema = mongoose.Schema({
       ref: 'Conversation',
     },
   ],
-  refreshToken: [
+  refreshTokens: [
     {
       token: String,
       validUntil: {
@@ -22,7 +22,10 @@ const userSchema = mongoose.Schema({
       },
     },
   ],
-  friends: [ObjectId],
+  friends: [{
+    type: ObjectId,
+    ref: 'User'
+  }],
   friendRequest: [ObjectId],
 });
 
