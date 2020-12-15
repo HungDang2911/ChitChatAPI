@@ -22,10 +22,18 @@ const userSchema = mongoose.Schema({
       },
     },
   ],
-  friends: [{
-    type: ObjectId,
-    ref: 'User'
-  }],
+  friends: [
+    {
+      chatted: {
+        type: Boolean,
+        default: false,
+      },
+      info: {
+        type: ObjectId,
+        ref: 'User',
+      },
+    },
+  ],
   friendRequest: [ObjectId],
 });
 
