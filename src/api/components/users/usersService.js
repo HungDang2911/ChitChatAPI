@@ -24,12 +24,16 @@ module.exports.getOneUserByUsername = async (username) => {
   }
 };
 
-module.exports.getUsersByUsername = async (username) => {
+module.exports.getUsersByUsername = async (userId, username) => {
   try {
     const records = await User.find(
       { username: new RegExp(username, 'i') },
       '-password'
     );
+    const user = User.findById(userId, 'friends');
+    records.forEach(record => {
+      if (user.friends.includes(record._id)) rec
+    })
     return records;
   } catch (err) {
     console.log(err);

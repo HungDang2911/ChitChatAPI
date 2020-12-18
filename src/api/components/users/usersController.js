@@ -34,8 +34,11 @@ module.exports.login = async (req, res) => {
 };
 
 module.exports.searchUser = async (req, res) => {
+  const token = req.headers['authorization'];
+  const userId = usersService.decodeToken(token)._id;
   const username = req.query.username;
-  const records = await usersService.getUsersByName(username);
+  const records = await usersService.getUsersByUsername(username);
+
   res.send(records);
 };
 

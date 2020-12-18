@@ -6,9 +6,19 @@ module.exports.getAllConversations = async (userId) => {
     const user = await User.findById(userId, 'conversations')
       .populate({
         path: 'conversations',
-        select: '_id messages',
+        select: '_id members messages avatar displayName',
+        populate: {
+          path: 'members',
+          select: '_id fullName username avatar',
+        },
       })
       .exec();
+    user.conversations.forEach((conversation) => {
+      if (conversation.members.length === 2) {
+        conversation.avatar = '';
+        conversation.displayName = '';
+      }
+    });
     return user.conversations;
   } catch (err) {
     console.log(err);
@@ -36,8 +46,10 @@ module.exports.createNewConversationWithAMessage = async (
 ) => {
   try {
     const newConversation = new Conversation({
+      members: [user1Id, user2Id],
       messages: [message],
     });
+
     const newConversationId = (await newConversation.save())._id;
 
     // update user1

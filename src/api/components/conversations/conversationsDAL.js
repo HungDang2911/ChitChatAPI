@@ -3,6 +3,14 @@ const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Schema.Types;
 
 const conversationSchema = mongoose.Schema({
+  displayName: String,
+  avatar: String,
+  members: [
+    {
+      type: ObjectId,
+      ref: 'User',
+    },
+  ],
   messages: [
     {
       sender: {
@@ -18,8 +26,8 @@ const conversationSchema = mongoose.Schema({
         required: true,
       },
       createdAt: {
-        type: Date,
-        default: Date.now,
+        type: Number,
+        default: new Date(),
       },
     },
   ],
