@@ -34,7 +34,7 @@ const userSchema = mongoose.Schema({
       },
     },
   ],
-  friendRequest: [ObjectId],
+  friendRequests: [ObjectId],
 });
 
 module.exports = mongoose.model('User', userSchema);

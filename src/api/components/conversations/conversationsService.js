@@ -13,10 +13,15 @@ module.exports.getAllConversations = async (userId) => {
         },
       })
       .exec();
+
+    // If conversation is a 2-member conversation, set the other user info to conversation info
     user.conversations.forEach((conversation) => {
       if (conversation.members.length === 2) {
-        conversation.avatar = '';
-        conversation.displayName = '';
+        const theOtherUser = conversation.members.find(
+          (member) => member._id != userId
+        );
+        conversation.avatar = theOtherUser.avatar;
+        conversation.displayName = theOtherUser.fullName;
       }
     });
     return user.conversations;

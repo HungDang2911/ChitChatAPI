@@ -40,7 +40,7 @@ var admin = require('firebase-admin');
 var serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert(serviceAccount),
 });
 
 io.on('connection', (socket) => {
@@ -60,18 +60,30 @@ io.on('connection', (socket) => {
 
   socket.on('chat', (data) => {
     const { message, room } = data;
-    console.log(`msg: ${message}, room: ${room}`);
-    socket.broadcast.to(room).emit('chat', message);
-    socket.emit('chat', )
+    console.log(data.room);
+    console.log(message);
+    socket.to(room).emit('chat', message);
+
+    //push notification
+    // var payload = {
+    //   notification: {
+    //     title: "This is a Notification",
+    //     body: "This is the body of the notification message."
+    //   }
+    // };
+
+    //  var options = {
+    //   priority: "high",
+    //   timeToLive: 60 * 60 *24
+    // };
+    // admin.messaging().sendToDevice(registrationToken, payload, option);
   });
 
   socket.on('sendFriendRequest', function (data) {
-    users[data.friendId].socket.emit("receiveFriendRequest")
+    users[data.friendId].socket.emit('receiveFriendRequest');
   });
 
-  socket.on('acceptFriendRequest', function(data) {
-    
-  })
+  socket.on('acceptFriendRequest', function (data) {});
 });
 
 server.listen(port);

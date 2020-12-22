@@ -17,7 +17,10 @@ module.exports.createUser = async (user) => {
 
 module.exports.getOneUserByUsername = async (username) => {
   try {
-    const user = await User.findOne({ username });
+    const user = await User.findOne(
+      { username },
+      '-password -refreshTokens -conversations -friendRequests -friends -__v -sex'
+    );
     return user;
   } catch (err) {
     console.log(err);
@@ -28,12 +31,12 @@ module.exports.getUsersByUsername = async (userId, username) => {
   try {
     const records = await User.find(
       { username: new RegExp(username, 'i') },
-      '-password'
+      '-password -refreshTokens -conversations -friendRequests -friends'
     );
-    const user = User.findById(userId, 'friends');
-    records.forEach(record => {
-      if (user.friends.includes(record._id)) rec
-    })
+    const user = await User.findById(userId, 'friends');
+    // records.forEach((record) => {
+    //   if (user.friends.includes(record._id)) rec;
+    // });
     return records;
   } catch (err) {
     console.log(err);

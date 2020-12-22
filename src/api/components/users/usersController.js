@@ -37,7 +37,7 @@ module.exports.searchUser = async (req, res) => {
   const token = req.headers['authorization'];
   const userId = usersService.decodeToken(token)._id;
   const username = req.query.username;
-  const records = await usersService.getUsersByUsername(username);
+  const records = await usersService.getUsersByUsername(userId, username);
 
   res.send(records);
 };
@@ -53,6 +53,17 @@ module.exports.getAccessToken = (req, res) => {
 module.exports.rejectToken = (req, res) => {
   const { username } = req.body;
   //FIND USER AND DELETE ALL REFRESH TOKENS
+};
+
+module.exports.getOneUserByUsername = async (req, res) => {
+  const { username } = req.body;
+
+  try {
+    const user = await usersService.getOneUserByUsername(username);
+    res.send(user);
+  } catch (err) {
+    res.status(500).send(err);
+  }
 };
 
 module.exports.acceptFriendRequest = async (req, res) => {

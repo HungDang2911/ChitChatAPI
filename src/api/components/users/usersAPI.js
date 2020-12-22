@@ -1,11 +1,12 @@
-const usersAPI = require("express").Router();
-const usersController = require("./usersController");
+const usersAPI = require('express').Router();
+const usersController = require('./usersController');
 
-usersAPI.post("/register", usersController.register);
-usersAPI.post("/login", usersController.login);
-usersAPI.post("/token", usersController.getAccessToken);
-usersAPI.post("/friends", usersController.acceptFriendRequest);
-usersAPI.post("/search", usersController.searchUser);
-usersAPI.get("/friends", usersController.getFriends);
+usersAPI.post('/register', usersController.register);
+usersAPI.post('/login', usersController.login);
+usersAPI.post('/token', usersController.getAccessToken);
+usersAPI.post('/friends', usersController.acceptFriendRequest);
+usersAPI.post('/search', usersController.searchUser);
+usersAPI.get('/friends', usersController.getFriends);
+usersAPI.post('/username', usersController.getOneUserByUsername);
 
 module.exports = usersAPI;
