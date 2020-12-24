@@ -32,13 +32,14 @@ module.exports.getAllConversations = async (userId) => {
 
 module.exports.addMessageToConversation = async (conversationId, message) => {
   try {
-    await Conversation.findOneAndUpdate(
+    const conversation = await Conversation.findOneAndUpdate(
       { _id: conversationId },
       {
         $push: { messages: message },
       },
-      { upsert: true }
+      { upsert: true, new: true }
     );
+    return conversation.messages[conversation.messages.length - 1];
   } catch (err) {
     console.log(err);
   }

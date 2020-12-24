@@ -32,8 +32,7 @@ const port = process.env.PORT || 3000;
 const server = http.createServer(app);
 const options = {};
 const io = require('socket.io')(server, options);
-
-const users = {};
+const conversationsService = require('./src/api/components/conversations/conversationsService');
 
 var admin = require('firebase-admin');
 
@@ -50,7 +49,6 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     console.log(`Disconnected: ${socket.id}`);
-    delete users[socket.id];
   });
 
   socket.on('join', (room) => {
@@ -58,11 +56,17 @@ io.on('connection', (socket) => {
     socket.join(room);
   });
 
-  socket.on('chat', (data) => {
+  socket.on('chat', async (data) => {
     const { message, room } = data;
-    console.log(data.room);
-    console.log(message);
-    socket.to(room).emit('chat', message);
+
+    const newMessage = await conversationsService.addMessageToConversation(
+      room,
+      message
+    );
+
+    console.log(newMessage);
+
+    io.to(room).emit('chat', { message: newMessage, room });
 
     //push notification
     // var payload = {
