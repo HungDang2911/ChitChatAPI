@@ -89,6 +89,19 @@ module.exports.getFriends = async (req, res) => {
   }
 };
 
+module.exports.editProfile = async (req, res) => {
+  const token = req.headers['authorization'];
+  const userId = usersService.decodeToken(token)._id;
+  const newUserInfo = req.body;
+
+  try {
+    await usersService.editUser(userId, newUserInfo);
+    res.send();
+  } catch (err) {
+    res.status(500).send();
+  }
+};
+
 const authenticateToken = (req, res, next) => {
   console.log(req.headers);
   // const authHeader = req.headers['authorization'];

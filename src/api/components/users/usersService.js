@@ -125,3 +125,11 @@ module.exports.getAllConversations = async (userId) => {
     console.log(err);
   }
 };
+
+module.exports.editUser = async (userId, newUserInfo) => {
+  try {
+    await User.findByIdAndUpdate(userId, newUserInfo);
+  } catch (err) {
+    console.log(err);
+  }
+};

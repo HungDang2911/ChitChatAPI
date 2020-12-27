@@ -8,5 +8,6 @@ usersAPI.post('/friends', usersController.acceptFriendRequest);
 usersAPI.post('/search', usersController.searchUser);
 usersAPI.get('/friends', usersController.getFriends);
 usersAPI.post('/username', usersController.getOneUserByUsername);
+usersAPI.post('/edit', usersController.editProfile);
 
 module.exports = usersAPI;
