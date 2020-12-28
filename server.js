@@ -129,10 +129,6 @@ io.on('connection', (socket) => {
     users[socket.id] = data;
   });
 
-  socket.on('disconnect', () => {
-    console.log(`Disconnected: ${socket.id}`);
-  });
-
   socket.on('join', (room) => {
     console.log(`Socket ${socket.id} joining ${room}`);
     socket.join(room);
@@ -146,27 +142,26 @@ io.on('connection', (socket) => {
       message
     );
 
-    console.log(newMessage);
-
     io.to(room).emit('chat', { message: newMessage, room });
 
-    //push notification
+    // push notification
     // var payload = {
     //   notification: {
-    //     title: "This is a Notification",
-    //     body: "This is the body of the notification message."
-    //   }
+    //     title: 'This is a Notification',
+    //     body: 'This is the body of the notification message.',
+    //   },
     // };
 
-    //  var options = {
-    //   priority: "high",
-    //   timeToLive: 60 * 60 *24
+    // var options = {
+    //   priority: 'high',
+    //   timeToLive: 60 * 60 * 24,
     // };
-    // admin.messaging().sendToDevice(registrationToken, payload, option);
+
+    // admin.messaging().sendToDevice(registrationToken, payload, options);
   });
 
-  socket.on('sendFriendRequest', function (data) {
-    users[data.friendId].socket.emit('receiveFriendRequest');
+  socket.on('addFriend', function (data) {
+    socket.to(data.friendId).emit('reloadFriendList');
   });
 
   socket.on('acceptFriendRequest', function (data) {});
@@ -356,6 +351,10 @@ io.on('connection', (socket) => {
 
     callback('successfully exited room');
   });
+});
+
+app.get('/', (req, res) => {
+  res.send('Ok');
 });
 
 server.listen(port);

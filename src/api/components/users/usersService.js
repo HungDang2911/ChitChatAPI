@@ -2,6 +2,12 @@ const User = require('./usersDAL');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+const FRIEND_STATUS = {
+  FRIEND: 1,
+  NOT_FRIEND: -1,
+  REQUEST_SENT: 0,
+};
+
 module.exports.createUser = async (user) => {
   const { password } = user;
   const saltRounds = 10;
@@ -33,10 +39,12 @@ module.exports.getUsersByUsername = async (userId, username) => {
       { username: new RegExp(username, 'i') },
       '-password -refreshTokens -conversations -friendRequests -friends'
     );
-    const user = await User.findById(userId, 'friends');
-    // records.forEach((record) => {
-    //   if (user.friends.includes(record._id)) rec;
-    // });
+    const user = await User.findById(userId, 'friends _id');
+    records.forEach((record) => {
+      if (user.friends.includes(record._id))
+        record.isFriend = FRIEND_STATUS.FRIEND;
+    });
+    records.filter((record) => record._id == user._id);
     return records;
   } catch (err) {
     console.log(err);

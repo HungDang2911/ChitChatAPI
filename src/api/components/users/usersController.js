@@ -102,6 +102,19 @@ module.exports.editProfile = async (req, res) => {
   }
 };
 
+module.exports.saveFCMToken = async (req, res) => {
+  const token = req.headers['authorization'];
+  const userId = usersService.decodeToken(token)._id;
+  const fcmToken = req.body;
+
+  try {
+    await usersService.editUser(userId, fcmToken)
+    res.send();
+  } catch (err) {
+    res.status(500).send()
+  }
+};
+
 const authenticateToken = (req, res, next) => {
   console.log(req.headers);
   // const authHeader = req.headers['authorization'];
