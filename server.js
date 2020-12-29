@@ -135,7 +135,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('chat', async (data) => {
-    const { message, room } = data;
+    const { message, room, fcmTokens, senderName } = data;
 
     const newMessage = await conversationsService.addMessageToConversation(
       room,
@@ -144,20 +144,19 @@ io.on('connection', (socket) => {
 
     io.to(room).emit('chat', { message: newMessage, room });
 
-    // push notification
-    // var payload = {
-    //   notification: {
-    //     title: 'This is a Notification',
-    //     body: 'This is the body of the notification message.',
-    //   },
-    // };
+    var payload = {
+      notification: {
+        title: senderName,
+        body: newMessage.content,
+      },
+    };
 
-    // var options = {
-    //   priority: 'high',
-    //   timeToLive: 60 * 60 * 24,
-    // };
+    var options = {
+      priority: 'high',
+      timeToLive: 60 * 60 * 24,
+    };
 
-    // admin.messaging().sendToDevice(registrationToken, payload, options);
+    admin.messaging().sendToDevice(fcmTokens, payload, options);
   });
 
   socket.on('addFriend', function (data) {

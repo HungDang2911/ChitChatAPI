@@ -9,7 +9,7 @@ module.exports.getAllConversations = async (userId) => {
         select: '_id members messages avatar displayName',
         populate: {
           path: 'members',
-          select: '_id fullName username avatar',
+          select: '_id fullName username avatar fcmToken',
         },
       })
       .exec();

@@ -9,6 +9,6 @@ usersAPI.post('/search', usersController.searchUser);
 usersAPI.get('/friends', usersController.getFriends);
 usersAPI.post('/username', usersController.getOneUserByUsername);
 usersAPI.post('/edit', usersController.editProfile);
-usersAPI.post('/fcm-token', usersController.saveFCMToKen);
+usersAPI.post('/fcm-token', usersController.saveFCMToken);
 
 module.exports = usersAPI;

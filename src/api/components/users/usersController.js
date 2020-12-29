@@ -108,10 +108,10 @@ module.exports.saveFCMToken = async (req, res) => {
   const fcmToken = req.body;
 
   try {
-    await usersService.editUser(userId, fcmToken)
+    await usersService.editUser(userId, fcmToken);
     res.send();
   } catch (err) {
-    res.status(500).send()
+    res.status(500).send();
   }
 };
 

@@ -37,15 +37,22 @@ module.exports.getUsersByUsername = async (userId, username) => {
   try {
     const records = await User.find(
       { username: new RegExp(username, 'i') },
-      '-password -refreshTokens -conversations -friendRequests -friends'
+      '-password -refreshTokens -conversations -friendRequests -friends -__v'
     );
-    const user = await User.findById(userId, 'friends _id');
-    records.forEach((record) => {
-      if (user.friends.includes(record._id))
-        record.isFriend = FRIEND_STATUS.FRIEND;
+    const user = await User.findById(userId, 'friends _id').populate({
+      path: 'friends.info',
+      select: '_id',
     });
-    records.filter((record) => record._id == user._id);
-    return records;
+    records.forEach((record) => {
+      // console.log(record);
+      // if (user.friends.includes(record.info._id))
+      //   record.isFriend = FRIEND_STATUS.FRIEND;
+    });
+    // return records.filter((record) => record._id == user._id);
+    // console.log(records);
+
+    const result = records.filter((record) => record._id != userId);
+    return result;
   } catch (err) {
     console.log(err);
   }
@@ -98,7 +105,7 @@ module.exports.getFriends = async (userId) => {
   try {
     const user = await User.findById(userId, 'friends').populate({
       path: 'friends.info',
-      select: '_id fullName email username',
+      select: '_id fullName email username avatar',
     });
 
     return user.friends;
